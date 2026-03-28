@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UMAT AI Quiz System — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--b9:#0c1e4a;--b7:#1e4db7;--b6:#2563eb;--b5:#3b82f6;--b4:#60a5fa;--b1:#dbeafe;--b0:#eff6ff;
+  --t6:#0d9488;--t5:#14b8a6;--g6:#16a34a;--g1:#dcfce7;--r6:#dc2626;--r1:#fee2e2;
+  --a5:#f59e0b;--a1:#fef3c7;
+  --s9:#0f172a;--s8:#1e293b;--s7:#334155;--s6:#475569;--s5:#64748b;--s4:#94a3b8;
+  --s2:#e2e8f0;--s1:#f1f5f9;--s0:#f8fafc;--w:#ffffff;
+  --font:'Plus Jakarta Sans',sans-serif;--mono:'DM Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--b9);min-height:100vh;display:flex;
+  align-items:center;justify-content:center;overflow:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(59,130,246,.06) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(59,130,246,.06) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none}
+.orb1{width:420px;height:420px;background:radial-gradient(#3b82f6,transparent);top:-120px;left:-100px;opacity:.35}
+.orb2{width:320px;height:320px;background:radial-gradient(#14b8a6,transparent);bottom:-80px;right:-80px;opacity:.3}
+.wrap{position:relative;z-index:10;width:100%;max-width:460px;padding:20px}
+.logo{text-align:center;margin-bottom:28px}
+.logo-icon{width:66px;height:66px;border-radius:18px;background:linear-gradient(135deg,var(--b5),var(--t5));
+  display:inline-flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:14px;
+  box-shadow:0 0 36px rgba(59,130,246,.45)}
+.logo-name{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+.card{background:var(--w);border-radius:20px;padding:32px;box-shadow:0 24px 48px rgba(0,0,0,.4)}
+.card-title{font-size:20px;font-weight:800;color:var(--s9);margin-bottom:4px}
+.card-sub{font-size:13px;color:var(--s5);margin-bottom:24px}
+.tabs{display:flex;gap:4px;background:var(--s1);border-radius:10px;padding:4px;margin-bottom:22px}
+.tab{flex:1;padding:8px;border:none;border-radius:7px;font-family:var(--font);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;background:transparent;color:var(--s5)}
+.tab.active{background:var(--w);color:var(--b7);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+label{display:block;font-size:11px;font-weight:700;color:var(--s7);margin-bottom:5px;
+  letter-spacing:.3px;text-transform:uppercase}
+.input-wrap{position:relative;margin-bottom:14px}
+.input-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--s4)}
+input,select{width:100%;padding:11px 11px 11px 38px;border:1.5px solid var(--s2);border-radius:9px;
+  font-family:var(--font);font-size:13.5px;color:var(--s8);background:var(--w);
+  transition:all .15s;outline:none;appearance:none}
+input:focus,select:focus{border-color:var(--b5);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+input.err{border-color:var(--r6);box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+input::placeholder{color:var(--s4);font-family:var(--font)}
+.hint{font-size:11px;color:var(--s5);margin-top:4px;margin-bottom:14px}
+.hint code{background:var(--b0);color:var(--b7);border-radius:4px;padding:1px 6px;font-family:var(--mono);font-size:11px}
+.err-box{display:none;align-items:center;gap:8px;padding:10px 12px;background:var(--r1);
+  border-radius:8px;margin-bottom:14px;font-size:12px;color:var(--r6);font-weight:600}
+.err-box.show{display:flex}
+.btn-submit{width:100%;padding:13px;border:none;border-radius:10px;background:var(--b6);color:#fff;
+  font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:all .18s;
+  box-shadow:0 4px 14px rgba(37,99,235,.35);margin-top:4px}
+.btn-submit:hover:not(:disabled){background:var(--b7);transform:translateY(-1px)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+#lecturer-panel{display:none}
+.demo-info{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);border-radius:10px;
+  padding:10px 14px;margin-top:16px;font-size:11px;color:rgba(255,255,255,.65);line-height:1.6}
+.demo-info strong{color:rgba(255,255,255,.9);font-family:var(--mono)}
+.footer-txt{text-align:center;margin-top:18px;font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.5px}
+.divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--s4);font-size:11px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--s2)}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="wrap">
+  <div class="logo">
+    <div class="logo-icon">🎓</div>
+    <div class="logo-name">UMAT Quiz System</div>
+    <div class="logo-sub">AI-Proctored Examinations · Tarkwa</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Sign In</div>
+    <div class="card-sub">Access the University of Mines and Technology examination portal</div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('student',this)">🎓 Student</button>
+      <button class="tab" onclick="switchTab('lecturer',this)">👨‍🏫 Lecturer</button>
+    </div>
+    <div class="err-box" id="err-box"><span>⚠️</span><span id="err-text"></span></div>
+
+    <!-- STUDENT -->
+    <div id="student-panel">
+      <label>UMAT Reference Number</label>
+      <div class="input-wrap">
+        <span class="input-icon">🪪</span>
+        <input type="text" id="ref-input" placeholder="UMAT/CS/21/0042" autocomplete="off"
+          spellcheck="false" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')studentLogin()"/>
+      </div>
+      <div class="hint">Format: <code>UMAT/DEPT/YY/NNNN</code> &nbsp;·&nbsp; e.g. <code>UMAT/CS/21/0042</code></div>
+      <button class="btn-submit" id="student-btn" onclick="studentLogin()">Sign In to Exam Portal</button>
+    </div>
+
+    <!-- LECTURER -->
+    <div id="lecturer-panel">
+      <label>Username</label>
+      <div class="input-wrap">
+        <span class="input-icon">👤</span>
+        <input type="text" id="lec-user" placeholder="e.g. lecturer" autocomplete="off"/>
+      </div>
+      <label>Password</label>
+      <div class="input-wrap">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="lec-pass" placeholder="Enter your password"
+          onkeydown="if(event.key==='Enter')lecturerLogin()"/>
+      </div>
+      <button class="btn-submit" id="lec-btn" onclick="lecturerLogin()">Sign In to Dashboard</button>
+    </div>
+  </div>
+
+  <div class="demo-info">
+    🧪 <strong>Demo Student:</strong> UMAT/CS/21/0042 &nbsp;|&nbsp;
+    <strong>Demo Lecturer:</strong> lecturer / umat2026
+  </div>
+  <div class="footer-txt">UMAT AI Quiz System v2.0 · University of Mines &amp; Technology, Tarkwa, Ghana</div>
+</div>
+
+<script src="js/umat-data.js"></script>
+<script>
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('student-panel').style.display = tab==='student'?'block':'none';
+  document.getElementById('lecturer-panel').style.display = tab==='lecturer'?'block':'none';
+  hideErr();
+}
+function showErr(msg){document.getElementById('err-text').textContent=msg;document.getElementById('err-box').classList.add('show');}
+function hideErr(){document.getElementById('err-box').classList.remove('show');document.getElementById('ref-input')?.classList.remove('err');}
+
+async function studentLogin() {
+  const ref = document.getElementById('ref-input').value.trim().toUpperCase();
+  hideErr();
+  if (!ref) { showErr('Please enter your reference number.'); return; }
+  if (!/^UMAT\/[A-Z]{2,4}\/\d{2}\/\d{4}$/.test(ref)) {
+    showErr('Invalid format. Expected: UMAT/CS/21/0042');
+    document.getElementById('ref-input').classList.add('err'); return;
+  }
+  const btn = document.getElementById('student-btn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Verifying...';
+  try {
+    const data = await apiFetch('/auth/student/login', {
+      method:'POST', body: JSON.stringify({referenceNumber: ref})
+    });
+    localStorage.setItem('umat_token', data.token);
+    localStorage.setItem('umat_student', JSON.stringify(data.student));
+    window.location.href = 'dashboard.html';
+  } catch(e) {
+    // Demo fallback
+    const demos = {'UMAT/CS/21/0042':{id:1,fullName:'Ama Korantema',program:'BSc Computer Science and Engineering',department:'Computer Science',course:'Computer Science',level:300,email:'ama@umat.edu.gh',referenceNumber:'UMAT/CS/21/0042',enrollmentDate:'2021-09-01',totalQuizzesTaken:3},
+      'UMAT/CS/21/0043':{id:2,fullName:'Kojo Asante',program:'BSc Computer Science and Engineering',department:'Computer Science',course:'Computer Science',level:300,email:'kojo@umat.edu.gh',referenceNumber:'UMAT/CS/21/0043',enrollmentDate:'2021-09-01',totalQuizzesTaken:1},
+      'UMAT/ME/22/0010':{id:4,fullName:'Fatima Hassan',program:'BSc Mining Engineering',department:'Mining Engineering',course:'Mining Engineering',level:200,email:'fatima@umat.edu.gh',referenceNumber:'UMAT/ME/22/0010',enrollmentDate:'2022-09-01',totalQuizzesTaken:0},
+      'UMAT/EE/20/0055':{id:5,fullName:'Emeka Eze',program:'BSc Electrical Engineering',department:'Electrical Engineering',course:'Electrical Engineering',level:400,email:'emeka@umat.edu.gh',referenceNumber:'UMAT/EE/20/0055',enrollmentDate:'2020-09-01',totalQuizzesTaken:2}};
+    if (demos[ref]) {
+      localStorage.setItem('umat_token','demo_token');
+      localStorage.setItem('umat_student', JSON.stringify(demos[ref]));
+      window.location.href = 'dashboard.html';
+    } else { showErr(e.message || 'Reference number not found. Use a demo number to test.'); }
+  } finally { btn.disabled=false; btn.innerHTML='Sign In to Exam Portal'; }
+}
+
+async function lecturerLogin() {
+  const username = document.getElementById('lec-user').value.trim();
+  const password = document.getElementById('lec-pass').value;
+  hideErr();
+  if (!username||!password){showErr('Enter username and password.');return;}
+  const btn=document.getElementById('lec-btn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Signing in...';
+  try {
+    const data = await apiFetch('/auth/lecturer/login', {method:'POST',body:JSON.stringify({username,password})});
+    localStorage.setItem('umat_token',data.token);
+    localStorage.setItem('umat_lecturer', JSON.stringify(data.lecturer));
+    window.location.href='lecturer-dashboard.html';
+  } catch(e) {
+    if (username==='lecturer'&&password==='umat2026') {
+      localStorage.setItem('umat_token','demo_lec_token');
+      localStorage.setItem('umat_lecturer',JSON.stringify({id:1,fullName:'Dr. Emmanuel Boateng',department:'Computer Science',email:'e.boateng@umat.edu.gh',username:'lecturer'}));
+      window.location.href='lecturer-dashboard.html';
+    } else { showErr(e.message||'Invalid credentials. Demo: lecturer / umat2026'); }
+  } finally { btn.disabled=false; btn.innerHTML='Sign In to Dashboard'; }
+}
+</script>
+</body>
+</html>
